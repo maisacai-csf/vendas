@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Vendas - Açaí</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TOPO MOBILE -->
+  <div class="topbar">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <span>Painel de Vendas</span>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Admin</h2>
+    <nav>
+      <a onclick="mostrarDashboard()">Dashboard</a>
+      <a onclick="mostrarNovaVenda()">Nova Venda</a>
+    </nav>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <!-- CONTEÚDO -->
+  <div class="content">
+    
+    <!-- DASHBOARD -->
+    <section id="dashboard">
+      <h1>Dashboard</h1>
+      <p class="subtitle">Resumo geral do seu negócio</p>
+
+      <div class="cards">
+        <div class="card">
+          <h3>Vendas hoje</h3>
+          <strong id="totalVendas">0</strong>
+          <span>Pedidos realizados</span>
+        </div>
+
+        <div class="card">
+          <h3>Faturamento</h3>
+          <strong>R$ <span id="faturamento">0.00</span></strong>
+          <span>Total do dia</span>
+        </div>
+      </div>
+
+      <ul id="listaVendas"></ul>
+    </section>
+
+    <!-- NOVA VENDA -->
+    <section id="novaVenda" style="display:none;">
+      <h1>Registrar Venda</h1>
+
+      <form id="formVenda">
+        <label>Produto</label>
+        <select id="produto">
+          <option>Açaí 300ml</option>
+          <option>Açaí 500ml</option>
+          <option>Açaí 700ml</option>
+          <option>Açaí 1kg</option>
+        </select>
+
+        <label>Valor</label>
+        <input type="number" id="valor" required>
+
+        <label>Pagamento</label>
+        <select id="pagamento">
+          <option>Pix</option>
+          <option>Dinheiro</option>
+          <option>Cartão</option>
+        </select>
+
+        <button type="submit" class="btn">Salvar Venda</button>
+      </form>
+    </section>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="firebase.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

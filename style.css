@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #f5f6fa;
+  color: #333;
+}
+
+/* TOPO MOBILE */
+.topbar {
+  display: none;
+  background: linear-gradient(90deg, #6a11cb, #4b0082);
+  color: white;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* SIDEBAR (PC) */
+.sidebar {
+  width: 230px;
+  height: 100vh;
+  background: linear-gradient(180deg, #6a11cb, #4b0082);
+  padding: 30px 20px;
+  color: white;
+  position: fixed;
+}
+
+.sidebar h2 {
+  margin-bottom: 40px;
+}
+
+.sidebar nav a {
+  display: block;
+  margin-bottom: 18px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* CONTEÚDO */
+.content {
+  margin-left: 230px;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 32px;
+  color: #2d0066;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+/* CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.card strong {
+  font-size: 32px;
+  color: #4b0082;
+}
+
+/* FORM */
+label {
+  font-weight: bold;
+  margin-top: 14px;
+  display: block;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+button.btn {
+  margin-top: 22px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #6a11cb, #4b0082);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .topbar {
+    display: block;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 20px 16px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .card strong {
+    font-size: 24px;
+  }
+}
