@@ -68,24 +68,28 @@ window.carregarDashboard = async function () {
 };
 window.carregarRelatorio = async function () {
   const q = query(collection(db, "vendas"), orderBy("data", "desc"));
-  const querySnapshot = await getDocs(q);
+  const snapshot = await getDocs(q);
 
   const lista = document.getElementById("listaRelatorio");
   lista.innerHTML = "";
 
-  querySnapshot.forEach((doc) => {
+  snapshot.forEach(doc => {
     const v = doc.data();
+    const data = v.data.toDate();
 
-    let dataFormatada = "Sem data";
+    const tr = document.createElement("tr");
 
-    if (v.data && v.data.toDate) {
-      dataFormatada = v.data.toDate().toLocaleString("pt-BR");
-    }
+    tr.innerHTML = `
+      <td>${data.toLocaleDateString()}</td>
+      <td>${data.toLocaleTimeString()}</td>
+      <td>${v.produto}</td>
+      <td>${v.pagamento}</td>
+      <td>R$ ${Number(v.valor).toFixed(2)}</td>
+    `;
 
-    const li = document.createElement("li");
-    li.textContent = `${dataFormatada} — ${v.produto} — R$ ${v.valor.toFixed(2)} — ${v.pagamento}`;
-    lista.appendChild(li);
+    lista.appendChild(tr);
   });
 };
+
 
 window.carregarDashboard();

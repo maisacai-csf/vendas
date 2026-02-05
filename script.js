@@ -28,4 +28,56 @@ window.toggleMenu = function () {
   document.querySelector(".sidebar").classList.toggle("open");
   document.getElementById("overlay").classList.toggle("show");
 }
+let grafico;
+
+async function carregarGraficoMensal() {
+  const vendasRef = collection(db, "vendas");
+  const snapshot = await getDocs(vendasRef);
+
+  const meses = [
+    "Jan","Fev","Mar","Abr","Mai","Jun",
+    "Jul","Ago","Set","Out","Nov","Dez"
+  ];
+
+  const totais = Array(12).fill(0);
+
+  snapshot.forEach(doc => {
+    const v = doc.data();
+
+    if (v.data) {
+      const data = v.data.toDate();
+      const mes = data.getMonth();
+      totais[mes] += Number(v.valor);
+    }
+  });
+
+  const ctx = document.getElementById("graficoVendas");
+
+  if (grafico) grafico.destroy();
+
+  grafico = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: meses,
+      datasets: [{
+        label: "Total vendido (R$)",
+        data: totais,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+window.mostrarDashboard = function () {
+  dashboard.style.display = "block";
+  novaVenda.style.display = "none";
+  relatorio.style.display = "none";
+
+  carregarGraficoMensal();
+}
 

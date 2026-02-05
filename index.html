@@ -46,6 +46,8 @@
           <strong>R$ <span id="faturamento">0.00</span></strong>
           <span>Total do dia</span>
         </div>
+        <h2>Vendas por mês</h2>
+      <canvas id="graficoVendas" height="120"></canvas>
       </div>
 
       <ul id="listaVendas"></ul>
@@ -79,13 +81,25 @@
     </section>
   <!-- RELATÓRIO DE VENDAS -->
   <section id="relatorio" style="display:none;">
-    <h1>Relatório de Vendas</h1>
-    <ul id="listaRelatorio"></ul>
+<h2>Relatório de Vendas</h2>
+<table class="tabela-relatorio">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Hora</th>
+      <th>Produto</th>
+      <th>Pagamento</th>
+      <th>Valor (R$)</th>
+    </tr>
+  </thead>
+  <tbody id="listaRelatorio"></tbody>
+</table>
+
   </section>
   </div>
   <!-- SCRIPTS -->
   <script type="module" src="firebase.js"></script>
   <script src="script.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
