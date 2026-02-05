@@ -66,5 +66,19 @@ window.carregarDashboard = async function () {
   document.getElementById("totalVendas").textContent = qtd;
   document.getElementById("faturamento").textContent = total.toFixed(2);
 };
+window.carregarRelatorio = async function () {
+  const q = query(collection(db, "vendas"), orderBy("data", "desc"));
+  const querySnapshot = await getDocs(q);
+
+  const lista = document.getElementById("listaRelatorio");
+  lista.innerHTML = "";
+
+  querySnapshot.forEach((doc) => {
+    const v = doc.data();
+    const li = document.createElement("li");
+    li.textContent = `${v.dataTexto} — ${v.produto} — R$ ${v.valor.toFixed(2)} — ${v.pagamento}`;
+    lista.appendChild(li);
+  });
+};
 
 window.carregarDashboard();
