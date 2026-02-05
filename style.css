@@ -131,3 +131,42 @@ button.btn {
     font-size: 24px;
   }
 }
+/* ===== MENU MOBILE FUNCIONANDO ===== */
+
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: white;
+  margin-right: 10px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  z-index: 998;
+}
+
+.overlay.show {
+  display: block;
+}
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* escondida */
+    height: 100%;
+    z-index: 999;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0; /* aparece */
+  }
+
+}
+
