@@ -20,6 +20,7 @@
     <nav>
       <a onclick="mostrarDashboard()">Dashboard</a>
       <a onclick="mostrarNovaVenda()">Nova Venda</a>
+      <a onclick="mostrarRelatorio()">Relatório</a>
     </nav>
   </div>
 
@@ -76,9 +77,12 @@
         <button type="submit" class="btn">Salvar Venda</button>
       </form>
     </section>
-
+  <!-- RELATÓRIO DE VENDAS -->
+  <section id="relatorio" style="display:none;">
+    <h1>Relatório de Vendas</h1>
+    <ul id="listaRelatorio"></ul>
+  </section>
   </div>
-
   <!-- SCRIPTS -->
   <script type="module" src="firebase.js"></script>
   <script src="script.js"></script>

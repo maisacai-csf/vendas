@@ -19,15 +19,22 @@ const form = document.getElementById("formVenda");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const produto = document.getElementById("produto").value;
-  const valor = document.getElementById("valor").value;
+const produto = document.getElementById("produto").value;
+const valorInput = document.getElementById("valor").value.replace(",", ".");
+const valor = parseFloat(valorInput);
+
+if (isNaN(valor) || valor <= 0) {
+  alert("Digite um valor válido");
+  return;
+}
   const pagamento = document.getElementById("pagamento").value;
 
   await addDoc(collection(db, "vendas"), {
     produto,
     valor: Number(valor),
     pagamento,
-    data: new Date()
+    data: new Date(),
+    dataTexto: new Date().toLocaleString('pt-BR')
   });
 
   alert("Venda salva 🚀");
