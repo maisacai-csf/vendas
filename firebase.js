@@ -75,8 +75,15 @@ window.carregarRelatorio = async function () {
 
   querySnapshot.forEach((doc) => {
     const v = doc.data();
+
+    let dataFormatada = "Sem data";
+
+    if (v.data && v.data.toDate) {
+      dataFormatada = v.data.toDate().toLocaleString("pt-BR");
+    }
+
     const li = document.createElement("li");
-    li.textContent = `${v.dataTexto} — ${v.produto} — R$ ${v.valor.toFixed(2)} — ${v.pagamento}`;
+    li.textContent = `${dataFormatada} — ${v.produto} — R$ ${v.valor.toFixed(2)} — ${v.pagamento}`;
     lista.appendChild(li);
   });
 };
