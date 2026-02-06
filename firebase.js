@@ -1,58 +1,95 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, Timestamp } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  query, 
+  orderBy, 
+  Timestamp 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Config Firebase
+// CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyAcL7ZHc4470P0_DRJB6bTBOzjocz5JKtc",
   authDomain: "vendas-8bdec.firebaseapp.com",
   projectId: "vendas-8bdec",
   storageBucket: "vendas-8bdec.firebasestorage.app",
   messagingSenderId: "506252133539",
-  appId: "1:506252133539:web:ac15699d0282d00ea9ab16",
-  measurementId: "G-6GENLWLP0V"
+  appId: "1:506252133539:web:ac15699d0282d00ea9ab16"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ================== DOM READY ==================
 document.addEventListener("DOMContentLoaded", () => {
 
+  // 🔥 AGORA OS ELEMENTOS EXISTEM
+  const dashboard = document.getElementById("dashboard");
+  const novaVenda = document.getElementById("novaVenda");
+  const relatorio = document.getElementById("relatorio");
   const form = document.getElementById("formVenda");
 
+  // ====== CONTROLE DE TELAS ======
+  window.mostrarDashboard = function () {
+    dashboard.style.display = "block";
+    novaVenda.style.display = "none";
+    relatorio.style.display = "none";
+    carregarDashboard();
+  };
+
+  window.mostrarNovaVenda = function () {
+    dashboard.style.display = "none";
+    novaVenda.style.display = "block";
+    relatorio.style.display = "none";
+  };
+
+  window.mostrarRelatorio = function () {
+    dashboard.style.display = "none";
+    novaVenda.style.display = "none";
+    relatorio.style.display = "block";
+    carregarRelatorio();
+  };
+
+  window.toggleMenu = function () {
+    document.querySelector(".sidebar").classList.toggle("open");
+    document.getElementById("overlay").classList.toggle("show");
+  };
+
+  // ====== SALVAR VENDA ======
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const produto = document.getElementById("produto").value;
-    const valorInput = document.getElementById("valor").value.replace(",", ".");
-    const valor = parseFloat(valorInput);
+    const valor = parseFloat(
+      document.getElementById("valor").value.replace(",", ".")
+    );
+    const pagamento = document.getElementById("pagamento").value;
+
     if (isNaN(valor) || valor <= 0) {
       alert("Digite um valor válido");
       return;
     }
 
-    const pagamento = document.getElementById("pagamento").value;
-
     await addDoc(collection(db, "vendas"), {
       produto,
-      valor: Number(valor),
+      valor,
       pagamento,
-      data: Timestamp.fromDate(new Date()),       // Timestamp oficial
-      dataTexto: new Date().toLocaleString('pt-BR') // opcional, pra mostrar bonito
+      data: Timestamp.now()
     });
 
     alert("Venda salva 🚀");
     form.reset();
     window.mostrarDashboard();
-    window.carregarDashboard();
   });
 
-  // Carrega dashboard inicial
+  // 🚀 PRIMEIRA TELA AO ABRIR
   window.mostrarDashboard();
 });
 
-// Função dashboard
-window.carregarDashboard = async function () {
+// ================== DASHBOARD ==================
+async function carregarDashboard() {
   const q = query(collection(db, "vendas"), orderBy("data", "desc"));
   const snapshot = await getDocs(q);
 
@@ -65,7 +102,7 @@ window.carregarDashboard = async function () {
   snapshot.forEach(doc => {
     const v = doc.data();
     qtd++;
-    total += v.valor;
+    total += Number(v.valor);
 
     const li = document.createElement("li");
     li.textContent = `${v.produto} - R$ ${v.valor.toFixed(2)} (${v.pagamento})`;
@@ -74,10 +111,10 @@ window.carregarDashboard = async function () {
 
   document.getElementById("totalVendas").textContent = qtd;
   document.getElementById("faturamento").textContent = total.toFixed(2);
-};
+}
 
-// Função relatório
-window.carregarRelatorio = async function () {
+// ================== RELATÓRIO ==================
+async function carregarRelatorio() {
   const q = query(collection(db, "vendas"), orderBy("data", "desc"));
   const snapshot = await getDocs(q);
 
@@ -89,9 +126,8 @@ window.carregarRelatorio = async function () {
 
   snapshot.forEach(doc => {
     const v = doc.data();
-    if (!v.data || !v.valor) return;
+    const data = v.data.toDate();
 
-    const data = v.data.toDate(); // agora funciona corretamente
     total += Number(v.valor);
 
     const tr = document.createElement("tr");
@@ -100,11 +136,12 @@ window.carregarRelatorio = async function () {
       <td>${data.toLocaleTimeString("pt-BR")}</td>
       <td>${v.produto}</td>
       <td>${v.pagamento}</td>
-      <td>R$ ${Number(v.valor).toFixed(2)}</td>
+      <td>R$ ${v.valor.toFixed(2)}</td>
     `;
     lista.appendChild(tr);
   });
 
   totalSpan.textContent = total.toFixed(2);
-};
+}
+
 
