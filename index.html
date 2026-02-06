@@ -28,7 +28,7 @@
 
   <!-- CONTEÚDO -->
   <div class="content">
-    
+
     <!-- DASHBOARD -->
     <section id="dashboard">
       <h1>Dashboard</h1>
@@ -46,9 +46,10 @@
           <strong>R$ <span id="faturamento">0.00</span></strong>
           <span>Total do dia</span>
         </div>
-        <h2>Vendas por mês</h2>
-      <canvas id="graficoVendas" height="120"></canvas>
       </div>
+
+      <h2>Vendas por mês</h2>
+      <canvas id="graficoVendas" height="120"></canvas>
 
       <ul id="listaVendas"></ul>
     </section>
@@ -79,35 +80,39 @@
         <button type="submit" class="btn">Salvar Venda</button>
       </form>
     </section>
-  <!-- RELATÓRIO DE VENDAS -->
-<section id="relatorio" style="display:none;">
-  <h1>Relatório de Vendas</h1>
-  <p class="subtitle">Histórico completo das vendas registradas</p>
 
-  <div class="resumo-relatorio">
-    <strong>Total vendido: R$ <span id="totalRelatorio">0.00</span></strong>
+    <!-- RELATÓRIO -->
+    <section id="relatorio" style="display:none;">
+      <h1>Relatório de Vendas</h1>
+      <p class="subtitle">Histórico completo das vendas registradas</p>
+
+      <div class="resumo-relatorio">
+        <strong>Total vendido: R$ <span id="totalRelatorio">0.00</span></strong>
+      </div>
+
+      <div class="tabela-container">
+        <table class="tabela-relatorio">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Produto</th>
+              <th>Pagamento</th>
+              <th>Valor (R$)</th>
+            </tr>
+          </thead>
+          <tbody id="listaRelatorio"></tbody>
+        </table>
+      </div>
+    </section>
+
   </div>
 
-  <div class="tabela-container">
-    <table class="tabela-relatorio">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Hora</th>
-          <th>Produto</th>
-          <th>Pagamento</th>
-          <th>Valor (R$)</th>
-        </tr>
-      </thead>
-      <tbody id="listaRelatorio"></tbody>
-    </table>
-  </div>
-  </section>
-  </div>
   <!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="module" src="firebase.js"></script>
-<script type="module" src="vendas.js"></script>
-<script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="vendas.js"></script>
+  <script type="module" src="script.js"></script>
+
 </body>
 </html>

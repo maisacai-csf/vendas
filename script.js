@@ -10,11 +10,15 @@ const relatorio = document.getElementById("relatorio");
 
 let grafico;
 
+/* ======================
+   CONTROLE DE TELAS
+====================== */
 window.mostrarDashboard = function () {
   dashboard.style.display = "block";
   novaVenda.style.display = "none";
   relatorio.style.display = "none";
 
+  fecharMenu();
   carregarGraficoMensal();
 };
 
@@ -22,6 +26,8 @@ window.mostrarNovaVenda = function () {
   dashboard.style.display = "none";
   novaVenda.style.display = "block";
   relatorio.style.display = "none";
+
+  fecharMenu();
 };
 
 window.mostrarRelatorio = function () {
@@ -29,16 +35,29 @@ window.mostrarRelatorio = function () {
   novaVenda.style.display = "none";
   relatorio.style.display = "block";
 
+  fecharMenu();
+
   if (window.carregarRelatorio) {
     window.carregarRelatorio();
   }
 };
 
+/* ======================
+   MENU MOBILE
+====================== */
 window.toggleMenu = function () {
   document.querySelector(".sidebar").classList.toggle("open");
   document.getElementById("overlay").classList.toggle("show");
 };
 
+function fecharMenu() {
+  document.querySelector(".sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("show");
+}
+
+/* ======================
+   GRÁFICO MENSAL
+====================== */
 async function carregarGraficoMensal() {
   const canvas = document.getElementById("graficoVendas");
   if (!canvas) return;
@@ -78,7 +97,9 @@ async function carregarGraficoMensal() {
   });
 }
 
-/* 👉 GARANTE QUE O GRÁFICO APAREÇA AO ABRIR A PÁGINA */
+/* ======================
+   INICIALIZAÇÃO
+====================== */
 window.addEventListener("load", () => {
   mostrarDashboard();
 });
