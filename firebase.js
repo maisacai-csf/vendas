@@ -71,25 +71,30 @@ window.carregarRelatorio = async function () {
   const snapshot = await getDocs(q);
 
   const lista = document.getElementById("listaRelatorio");
+  const totalSpan = document.getElementById("totalRelatorio");
+
   lista.innerHTML = "";
+  let total = 0;
 
   snapshot.forEach(doc => {
     const v = doc.data();
+    if (!v.data) return;
+
     const data = v.data.toDate();
+    total += Number(v.valor);
 
     const tr = document.createElement("tr");
-
     tr.innerHTML = `
-      <td>${data.toLocaleDateString()}</td>
-      <td>${data.toLocaleTimeString()}</td>
+      <td>${data.toLocaleDateString("pt-BR")}</td>
+      <td>${data.toLocaleTimeString("pt-BR")}</td>
       <td>${v.produto}</td>
       <td>${v.pagamento}</td>
       <td>R$ ${Number(v.valor).toFixed(2)}</td>
     `;
-
     lista.appendChild(tr);
   });
-};
 
+  totalSpan.textContent = total.toFixed(2);
+};
 
 window.carregarDashboard();
