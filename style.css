@@ -122,6 +122,42 @@ button.btn {
 .tabela-relatorio tr:hover {
   background: #f9f9f9;
 }
+.tabela-container {
+  overflow-x: auto;
+}
+
+.tabela-relatorio {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.tabela-relatorio th {
+  background: #6c5ce7;
+  color: #fff;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.tabela-relatorio td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.tabela-relatorio tr:hover {
+  background: #f5f6fa;
+}
+
+.resumo-relatorio {
+  margin: 15px 0;
+  font-size: 18px;
+  color: #2d3436;
+}
 
 /* 📱 MOBILE */
 @media (max-width: 768px) {
