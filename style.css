@@ -1,42 +1,230 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
 body {
   background: #f5f6fa;
   color: #333;
-  min-height: 100vh;
-  overflow-x: hidden;
+}
+
+/* TOPO MOBILE */
+.topbar {
+  display: none;
+  background: linear-gradient(90deg, #6a11cb, #4b0082);
+  color: white;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* SIDEBAR (PC) */
+.sidebar {
+  width: 230px;
+  height: 100vh;
+  background: linear-gradient(180deg, #6a11cb, #4b0082);
+  padding: 30px 20px;
+  color: white;
+  position: fixed;
+}
+
+.sidebar h2 {
+  margin-bottom: 40px;
+}
+
+.sidebar nav a {
+  display: block;
+  margin-bottom: 18px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* CONTEÚDO */
+.content {
+  margin-left: 230px;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 32px;
+  color: #2d0066;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+/* CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.card strong {
+  font-size: 32px;
+  color: #4b0082;
+}
+
+/* FORM */
+label {
+  font-weight: bold;
+  margin-top: 14px;
+  display: block;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+button.btn {
+  margin-top: 22px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #6a11cb, #4b0082);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.tabela-relatorio {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tabela-relatorio th,
+.tabela-relatorio td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.tabela-relatorio th {
+  background: #f1f1f1;
+}
+
+.tabela-relatorio tr:hover {
+  background: #f9f9f9;
+}
+.tabela-container {
+  overflow-x: auto;
+}
+
+.tabela-relatorio {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.tabela-relatorio th {
+  background: #6c5ce7;
+  color: #fff;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.tabela-relatorio td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.tabela-relatorio tr:hover {
+  background: #f5f6fa;
+}
+
+.resumo-relatorio {
+  margin: 15px 0;
+  font-size: 18px;
+  color: #2d3436;
 }
 
 /* 📱 MOBILE */
 @media (max-width: 768px) {
 
-  .topbar {
-    display: flex;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 56px;
-    width: 100%;
-    z-index: 1001;
-  }
-
   .sidebar {
     position: fixed;
     top: 0;
-    left: -260px;
+    left: -260px; /* começa escondida fora da tela */
     width: 250px;
     height: 100%;
-    z-index: 1002;
+    background: linear-gradient(180deg, #6a11cb, #4b0082);
+    padding: 30px 20px;
+    z-index: 1000;
     transition: left 0.3s ease;
   }
 
   .sidebar.open {
-    left: 0;
+    left: 0; /* entra na tela */
   }
 
   .content {
     margin-left: 0;
-    padding: 20px;
-    padding-top: 80px; /* 🔑 ISSO RESOLVE O DASHBOARD */
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ===== MENU MOBILE FUNCIONANDO ===== */
+
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: white;
+  margin-right: 10px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  z-index: 998;
+}
+
+.overlay.show {
+  display: block;
+}
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* escondida */
+    height: 100%;
+    z-index: 999;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0; /* aparece */
   }
 
 }
+
+
