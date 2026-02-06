@@ -67,9 +67,9 @@ window.carregarDashboard = async function () {
   document.getElementById("faturamento").textContent = total.toFixed(2);
 };
 /* RELATÓRIO */
-async function carregarRelatorio() {
+window.carregarRelatorio = async function () {
   const q = query(collection(db, "vendas"), orderBy("data", "desc"));
-  const snap = await getDocs(q);
+  const snapshot = await getDocs(q);
 
   const lista = document.getElementById("listaRelatorio");
   const totalSpan = document.getElementById("totalRelatorio");
@@ -77,19 +77,17 @@ async function carregarRelatorio() {
   lista.innerHTML = "";
   let total = 0;
 
-  snap.forEach(doc => {
+  snapshot.forEach(doc => {
     const v = doc.data();
+    if (!v.data) return;
 
-    // Verifica se valor e data existem
-    if (!v.valor || !v.data) return;
-
-    const d = v.data.toDate();
+    const data = v.data.toDate();
     total += Number(v.valor);
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${d.toLocaleDateString("pt-BR")}</td>
-      <td>${d.toLocaleTimeString("pt-BR")}</td>
+      <td>${data.toLocaleDateString("pt-BR")}</td>
+      <td>${data.toLocaleTimeString("pt-BR")}</td>
       <td>${v.produto}</td>
       <td>${v.pagamento}</td>
       <td>R$ ${Number(v.valor).toFixed(2)}</td>
@@ -98,7 +96,8 @@ async function carregarRelatorio() {
   });
 
   totalSpan.textContent = total.toFixed(2);
-}
+};
+
 
 
 
