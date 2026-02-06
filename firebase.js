@@ -34,7 +34,9 @@ if (isNaN(valor) || valor <= 0) {
     valor: Number(valor),
     pagamento,
     data: new Date(),
-    dataTexto: new Date().toLocaleString('pt-BR')
+    dataTexto: new Date().toLocaleString('pt-BR'),
+    data: Timestamp.fromDate(new Date()) // <--- Salva como Timestamp
+
   });
 
   alert("Venda salva 🚀");
@@ -77,23 +79,23 @@ window.carregarRelatorio = async function () {
   lista.innerHTML = "";
   let total = 0;
 
-  snapshot.forEach(doc => {
-    const v = doc.data();
-    if (!v.data || !v.valor) return;
+snapshot.forEach(doc => {
+  const v = doc.data();
+  if (!v.data || !v.valor) return;
 
-    const data = new Date(v.data); // converte Date salvo no Firestore
-    total += Number(v.valor);
+  const data = v.data.toDate(); // agora funciona corretamente
+  total += Number(v.valor);
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${data.toLocaleDateString("pt-BR")}</td>
-      <td>${data.toLocaleTimeString("pt-BR")}</td>
-      <td>${v.produto}</td>
-      <td>${v.pagamento}</td>
-      <td>R$ ${Number(v.valor).toFixed(2)}</td>
-    `;
-    lista.appendChild(tr);
-  });
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${data.toLocaleDateString("pt-BR")}</td>
+    <td>${data.toLocaleTimeString("pt-BR")}</td>
+    <td>${v.produto}</td>
+    <td>${v.pagamento}</td>
+    <td>R$ ${Number(v.valor).toFixed(2)}</td>
+  `;
+  lista.appendChild(tr);
+});
 
   totalSpan.textContent = total.toFixed(2);
 };
