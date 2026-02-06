@@ -4,12 +4,13 @@ from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Config Firebase
 const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "AIzaSyAcL7ZHc4470P0_DRJB6bTBOzjocz5JKtc",
+  authDomain: "vendas-8bdec.firebaseapp.com",
+  projectId: "vendas-8bdec",
+  storageBucket: "vendas-8bdec.firebasestorage.app",
+  messagingSenderId: "506252133539",
+  appId: "1:506252133539:web:ac15699d0282d00ea9ab16",
+  measurementId: "G-6GENLWLP0V"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -106,3 +107,4 @@ window.carregarRelatorio = async function () {
 
   totalSpan.textContent = total.toFixed(2);
 };
+
