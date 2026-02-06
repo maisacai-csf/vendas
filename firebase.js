@@ -66,26 +66,40 @@ window.carregarDashboard = async function () {
   document.getElementById("totalVendas").textContent = qtd;
   document.getElementById("faturamento").textContent = total.toFixed(2);
 };
-window.carregarRelatorio = async function () {
+/* RELATÓRIO */
+async function carregarRelatorio() {
   const q = query(collection(db, "vendas"), orderBy("data", "desc"));
-  const querySnapshot = await getDocs(q);
+  const snap = await getDocs(q);
 
   const lista = document.getElementById("listaRelatorio");
-  lista.innerHTML = "";
+  const totalSpan = document.getElementById("totalRelatorio");
 
-  querySnapshot.forEach((doc) => {
+  lista.innerHTML = "";
+  let total = 0;
+
+  snap.forEach(doc => {
     const v = doc.data();
 
-    let dataFormatada = "Sem data";
+    // Verifica se valor e data existem
+    if (!v.valor || !v.data) return;
 
-    if (v.data && v.data.toDate) {
-      dataFormatada = v.data.toDate().toLocaleString("pt-BR");
-    }
+    const d = v.data.toDate();
+    total += Number(v.valor);
 
-    const li = document.createElement("li");
-    li.textContent = `${dataFormatada} — ${v.produto} — R$ ${v.valor.toFixed(2)} — ${v.pagamento}`;
-    lista.appendChild(li);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${d.toLocaleDateString("pt-BR")}</td>
+      <td>${d.toLocaleTimeString("pt-BR")}</td>
+      <td>${v.produto}</td>
+      <td>${v.pagamento}</td>
+      <td>R$ ${Number(v.valor).toFixed(2)}</td>
+    `;
+    lista.appendChild(tr);
   });
-};
+
+  totalSpan.textContent = total.toFixed(2);
+}
+
+
 
 window.carregarDashboard();

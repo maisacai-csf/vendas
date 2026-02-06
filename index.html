@@ -79,8 +79,30 @@
     </section>
   <!-- RELATÓRIO DE VENDAS -->
   <section id="relatorio" style="display:none;">
-    <h1>Relatório de Vendas</h1>
-    <ul id="listaRelatorio"></ul>
+<section id="relatorio" style="display:none;">
+  <h1>Relatório de Vendas</h1>
+  <p class="subtitle">Histórico completo das vendas registradas</p>
+
+  <div class="resumo-relatorio">
+    <strong>Total vendido: R$ <span id="totalRelatorio">0.00</span></strong>
+  </div>
+
+  <div class="tabela-container">
+    <table class="tabela-relatorio">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Produto</th>
+          <th>Pagamento</th>
+          <th>Valor (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="listaRelatorio"></tbody>
+    </table>
+  </div>
+</section>
+
   </section>
   </div>
   <!-- SCRIPTS -->
