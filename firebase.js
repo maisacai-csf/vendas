@@ -1,53 +1,59 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy } 
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, Timestamp } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Config Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAcL7ZHc4470P0_DRJB6bTBOzjocz5JKtc",
-  authDomain: "vendas-8bdec.firebaseapp.com",
-  projectId: "vendas-8bdec",
-  storageBucket: "vendas-8bdec.firebasestorage.app",
-  messagingSenderId: "506252133539",
-  appId: "1:506252133539:web:ac15699d0282d00ea9ab16"
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const form = document.getElementById("formVenda");
+document.addEventListener("DOMContentLoaded", () => {
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  const form = document.getElementById("formVenda");
 
-const produto = document.getElementById("produto").value;
-const valorInput = document.getElementById("valor").value.replace(",", ".");
-const valor = parseFloat(valorInput);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-if (isNaN(valor) || valor <= 0) {
-  alert("Digite um valor válido");
-  return;
-}
-  const pagamento = document.getElementById("pagamento").value;
+    const produto = document.getElementById("produto").value;
+    const valorInput = document.getElementById("valor").value.replace(",", ".");
+    const valor = parseFloat(valorInput);
+    if (isNaN(valor) || valor <= 0) {
+      alert("Digite um valor válido");
+      return;
+    }
 
-  await addDoc(collection(db, "vendas"), {
-    produto,
-    valor: Number(valor),
-    pagamento,
-    data: new Date(),
-    dataTexto: new Date().toLocaleString('pt-BR'),
-    data: Timestamp.fromDate(new Date()) // <--- Salva como Timestamp
+    const pagamento = document.getElementById("pagamento").value;
 
+    await addDoc(collection(db, "vendas"), {
+      produto,
+      valor: Number(valor),
+      pagamento,
+      data: Timestamp.fromDate(new Date()),       // Timestamp oficial
+      dataTexto: new Date().toLocaleString('pt-BR') // opcional, pra mostrar bonito
+    });
+
+    alert("Venda salva 🚀");
+    form.reset();
+    window.mostrarDashboard();
+    window.carregarDashboard();
   });
 
-  alert("Venda salva 🚀");
-  form.reset();
+  // Carrega dashboard inicial
   window.mostrarDashboard();
-  window.carregarDashboard();
 });
 
+// Função dashboard
 window.carregarDashboard = async function () {
   const q = query(collection(db, "vendas"), orderBy("data", "desc"));
-  const querySnapshot = await getDocs(q);
+  const snapshot = await getDocs(q);
 
   let total = 0;
   let qtd = 0;
@@ -55,7 +61,7 @@ window.carregarDashboard = async function () {
   const lista = document.getElementById("listaVendas");
   lista.innerHTML = "";
 
-  querySnapshot.forEach((doc) => {
+  snapshot.forEach(doc => {
     const v = doc.data();
     qtd++;
     total += v.valor;
@@ -68,7 +74,8 @@ window.carregarDashboard = async function () {
   document.getElementById("totalVendas").textContent = qtd;
   document.getElementById("faturamento").textContent = total.toFixed(2);
 };
-/* RELATÓRIO */
+
+// Função relatório
 window.carregarRelatorio = async function () {
   const q = query(collection(db, "vendas"), orderBy("data", "desc"));
   const snapshot = await getDocs(q);
@@ -79,25 +86,23 @@ window.carregarRelatorio = async function () {
   lista.innerHTML = "";
   let total = 0;
 
-snapshot.forEach(doc => {
-  const v = doc.data();
-  if (!v.data || !v.valor) return;
+  snapshot.forEach(doc => {
+    const v = doc.data();
+    if (!v.data || !v.valor) return;
 
-  const data = v.data.toDate(); // agora funciona corretamente
-  total += Number(v.valor);
+    const data = v.data.toDate(); // agora funciona corretamente
+    total += Number(v.valor);
 
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${data.toLocaleDateString("pt-BR")}</td>
-    <td>${data.toLocaleTimeString("pt-BR")}</td>
-    <td>${v.produto}</td>
-    <td>${v.pagamento}</td>
-    <td>R$ ${Number(v.valor).toFixed(2)}</td>
-  `;
-  lista.appendChild(tr);
-});
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${data.toLocaleDateString("pt-BR")}</td>
+      <td>${data.toLocaleTimeString("pt-BR")}</td>
+      <td>${v.produto}</td>
+      <td>${v.pagamento}</td>
+      <td>R$ ${Number(v.valor).toFixed(2)}</td>
+    `;
+    lista.appendChild(tr);
+  });
 
   totalSpan.textContent = total.toFixed(2);
 };
-
-window.carregarDashboard();
