@@ -1,105 +1,129 @@
 import { db } from "./firebase.js";
 import {
   collection,
-  getDocs
+  addDoc,
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* ELEMENTOS */
 const dashboard = document.getElementById("dashboard");
 const novaVenda = document.getElementById("novaVenda");
 const relatorio = document.getElementById("relatorio");
 
-let grafico;
+/* MENU */
+window.toggleMenu = function () {
+  document.querySelector(".sidebar").classList.toggle("open");
+  document.getElementById("overlay").classList.toggle("show");
+};
 
-/* ======================
-   CONTROLE DE TELAS
-====================== */
+/* NAVEGAÇÃO */
 window.mostrarDashboard = function () {
   dashboard.style.display = "block";
   novaVenda.style.display = "none";
   relatorio.style.display = "none";
-
-  fecharMenu();
-  carregarGraficoMensal();
+  carregarDashboard();
 };
 
 window.mostrarNovaVenda = function () {
   dashboard.style.display = "none";
   novaVenda.style.display = "block";
   relatorio.style.display = "none";
-
-  fecharMenu();
 };
 
 window.mostrarRelatorio = function () {
   dashboard.style.display = "none";
   novaVenda.style.display = "none";
   relatorio.style.display = "block";
+  carregarRelatorio();
+};
 
-  fecharMenu();
+/* REGISTRAR VENDA */
+const form = document.getElementById("formVenda");
 
-  if (window.carregarRelatorio) {
-    window.carregarRelatorio();
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const produto = document.getElementById("produto").value;
+  const valor = parseFloat(
+    document.getElementById("valor").value.replace(",", ".")
+  );
+  const pagamento = document.getElementById("pagamento").value;
+
+  if (isNaN(valor) || valor <= 0) {
+    alert("Digite um valor válido");
+    return;
   }
-};
 
-/* ======================
-   MENU MOBILE
-====================== */
-window.toggleMenu = function () {
-  document.querySelector(".sidebar").classList.toggle("open");
-  document.getElementById("overlay").classList.toggle("show");
-};
+  await addDoc(collection(db, "vendas"), {
+    produto,
+    valor,
+    pagamento,
+    data: new Date()
+  });
 
-function fecharMenu() {
-  document.querySelector(".sidebar").classList.remove("open");
-  document.getElementById("overlay").classList.remove("show");
-}
+  alert("Venda salva 🚀");
+  form.reset();
+  mostrarDashboard();
+});
 
-/* ======================
-   GRÁFICO MENSAL
-====================== */
-async function carregarGraficoMensal() {
-  const canvas = document.getElementById("graficoVendas");
-  if (!canvas) return;
+/* DASHBOARD */
+async function carregarDashboard() {
+  const q = query(collection(db, "vendas"), orderBy("data", "desc"));
+  const snap = await getDocs(q);
 
-  const vendasRef = collection(db, "vendas");
-  const snapshot = await getDocs(vendasRef);
+  let total = 0;
+  let qtd = 0;
 
-  const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-  const totais = Array(12).fill(0);
+  const lista = document.getElementById("listaVendas");
+  lista.innerHTML = "";
 
-  snapshot.forEach(doc => {
+  snap.forEach(doc => {
     const v = doc.data();
-    if (!v.data) return;
+    qtd++;
+    total += v.valor;
 
-    const mes = v.data.toDate().getMonth();
-    totais[mes] += Number(v.valor);
+    const li = document.createElement("li");
+    li.textContent = `${v.produto} - R$ ${v.valor.toFixed(2)} (${v.pagamento})`;
+    lista.appendChild(li);
   });
 
-  if (grafico) grafico.destroy();
-
-  grafico = new Chart(canvas, {
-    type: "bar",
-    data: {
-      labels: meses,
-      datasets: [{
-        label: "Total vendido (R$)",
-        data: totais
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false }
-      }
-    }
-  });
+  document.getElementById("totalVendas").textContent = qtd;
+  document.getElementById("faturamento").textContent = total.toFixed(2);
 }
 
-/* ======================
-   INICIALIZAÇÃO
-====================== */
-window.addEventListener("load", () => {
+/* RELATÓRIO */
+async function carregarRelatorio() {
+  const q = query(collection(db, "vendas"), orderBy("data", "desc"));
+  const snap = await getDocs(q);
+
+  const lista = document.getElementById("listaRelatorio");
+  const totalSpan = document.getElementById("totalRelatorio");
+
+  lista.innerHTML = "";
+  let total = 0;
+
+  snap.forEach(doc => {
+    const v = doc.data();
+    const d = v.data.toDate();
+    total += v.valor;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${d.toLocaleDateString("pt-BR")}</td>
+      <td>${d.toLocaleTimeString("pt-BR")}</td>
+      <td>${v.produto}</td>
+      <td>${v.pagamento}</td>
+      <td>R$ ${v.valor.toFixed(2)}</td>
+    `;
+    lista.appendChild(tr);
+  });
+
+  totalSpan.textContent = total.toFixed(2);
+}
+
+/* INICIAR */
+document.addEventListener("DOMContentLoaded", () => {
   mostrarDashboard();
 });
