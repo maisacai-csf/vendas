@@ -102,6 +102,26 @@ button.btn {
   border-radius: 12px;
   font-weight: bold;
 }
+.tabela-relatorio {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tabela-relatorio th,
+.tabela-relatorio td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.tabela-relatorio th {
+  background: #f1f1f1;
+}
+
+.tabela-relatorio tr:hover {
+  background: #f9f9f9;
+}
 
 /* 📱 MOBILE */
 @media (max-width: 768px) {
