@@ -79,9 +79,9 @@ window.carregarRelatorio = async function () {
 
   snapshot.forEach(doc => {
     const v = doc.data();
-    if (!v.data) return;
+    if (!v.data || !v.valor) return;
 
-    const data = v.data.toDate();
+    const data = new Date(v.data); // converte Date salvo no Firestore
     total += Number(v.valor);
 
     const tr = document.createElement("tr");
@@ -97,8 +97,5 @@ window.carregarRelatorio = async function () {
 
   totalSpan.textContent = total.toFixed(2);
 };
-
-
-
 
 window.carregarDashboard();
