@@ -139,6 +139,7 @@ async function carregarRelatorio() {
       <td>${data.toLocaleTimeString("pt-BR")}</td>
       <td>${v.produto}</td>
       <td>${v.pagamento}</td>
+      <td>${v.observacao || "-"}</td>
       <td>R$ ${v.valor.toFixed(2)}</td>
     `;
     lista.appendChild(tr);
@@ -146,6 +147,7 @@ async function carregarRelatorio() {
 
   totalSpan.textContent = total.toFixed(2);
 }
+
 
 
 
