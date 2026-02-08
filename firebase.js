@@ -66,6 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("valor").value.replace(",", ".")
     );
     const pagamento = document.getElementById("pagamento").value;
+    const observacao = document.getElementById("observacao").value;
+
 
     if (isNaN(valor) || valor <= 0) {
       alert("Digite um valor válido");
@@ -76,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       produto,
       valor,
       pagamento,
+      observacao,
       data: Timestamp.now()
     });
 
@@ -143,5 +146,6 @@ async function carregarRelatorio() {
 
   totalSpan.textContent = total.toFixed(2);
 }
+
 
 
